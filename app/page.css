@@ -442,6 +442,11 @@
   cursor: pointer;
 }
 
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
 .actions {
   display: grid;
 
@@ -451,7 +456,7 @@
 }
 
 .actions button {
-  border: 0;
+  border: 1px solid transparent;
 
   padding: 16px 10px;
 
@@ -460,17 +465,114 @@
   font-weight: 900;
 
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 }
+
+
+/* =========================================
+   DISABLED STATE
+========================================= */
+
+.actions button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+}
+
+
+/* =========================================
+   ACTIVE DARK THEME
+   Appears automatically when all
+   required details are filled.
+========================================= */
+
+.actions button:not(:disabled) {
+  background: #111111;
+
+  color: #ffffff;
+
+  border-color: #2f2f2f;
+
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+
+/* =========================================
+   ACTIVE HOVER
+========================================= */
+
+.actions button:not(:disabled):hover {
+  background: #1c1c1c;
+
+  color: #ffffff;
+
+  border-color: #444444;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+
+/* =========================================
+   ACTIVE PRESS
+========================================= */
+
+.actions button:not(:disabled):active {
+  transform: translateY(0);
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================
+   DEFAULT BUTTON COLORS
+   These remain underneath the disabled
+   state, while the active dark theme
+   overrides them.
+========================================= */
 
 .download {
   background: #9ba817;
+
   color: #12240f;
 }
 
 .share {
   background: #9c5b5d;
+
   color: #f3d9cf;
 }
+
+
+/* =========================================
+   LOADING STATE
+========================================= */
+
+.actions button:disabled {
+  background: #6f6f6f;
+
+  color: #d8d8d8;
+
+  border-color: transparent;
+}
+
+
+/* =========================================
+   UNLOCK MESSAGE
+========================================= */
 
 .unlock {
   margin: 0;
@@ -481,6 +583,11 @@
 
   font-size: 13px;
 }
+
+
+/* =========================================
+   TABLET / MOBILE
+========================================= */
 
 @media (max-width: 900px) {
   .page {
@@ -507,10 +614,17 @@
 
   .controls {
     max-width: 600px;
+
     width: 100%;
+
     margin: auto;
   }
 }
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
 
 @media (max-width: 550px) {
   .page {
@@ -535,16 +649,19 @@
 
   .badge {
     left: 10%;
+
     right: 10%;
   }
 
   .badge-info {
     left: 18px;
+
     right: 18px;
   }
 
   .approved {
     width: 52px;
+
     height: 52px;
   }
 }
