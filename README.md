@@ -132,3 +132,7 @@ The Blob store is configured through Vercel and its environment variables.
 
 # Rishu Raj
 - GitHub: @rishurajgit
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
