@@ -182,8 +182,10 @@ export default function Home() {
     try {
       setIsSharing(true);
 
+      // Generate the final Builder ID image.
       const dataUrl = await generateCardImage();
 
+      // Convert the generated image into a File.
       const response = await fetch(dataUrl);
 
       if (!response.ok) {
@@ -208,11 +210,18 @@ export default function Home() {
       );
 
       /*
-       * Mobile / supported browsers:
-       * Share the actual generated image.
+       * MOBILE
+       *
+       * On phones/tablets, use the native share sheet
+       * because it allows the actual PNG to be attached.
        */
+      const isMobile =
+        /Android|iPhone|iPad|iPod/i.test(
+          navigator.userAgent
+        );
+
       if (
-        typeof navigator !== "undefined" &&
+        isMobile &&
         navigator.share &&
         navigator.canShare &&
         navigator.canShare({
@@ -220,7 +229,8 @@ export default function Home() {
         })
       ) {
         await navigator.share({
-          title: "My Hacker House Goa 2026 Builder ID",
+          title:
+            "My Hacker House Goa 2026 Builder ID",
           text:
             "I built my Hacker House Goa 2026 Builder ID! #FrameInGoa",
           files: [file],
@@ -230,14 +240,16 @@ export default function Home() {
       }
 
       /*
-       * Desktop:
-       * Upload the generated image to Vercel Blob.
+       * DESKTOP
+       *
+       * Do NOT use navigator.share() here.
+       * Windows Chrome can open the Windows Share panel.
+       *
+       * Instead, upload the generated card to
+       * Vercel Blob and use its public URL.
        */
       const cardUrl = await uploadCard(dataUrl);
 
-      /*
-       * Temporary X fallback.
-       */
       const tweetText = encodeURIComponent(
         `I built my Hacker House Goa 2026 Builder ID! #FrameInGoa\n\n${cardUrl}`
       );
@@ -248,6 +260,10 @@ export default function Home() {
         "noopener,noreferrer"
       );
     } catch (error) {
+      /*
+       * User closing the native mobile share sheet
+       * results in AbortError. That is not a failure.
+       */
       if (
         error instanceof DOMException &&
         error.name === "AbortError"
@@ -269,6 +285,10 @@ export default function Home() {
 
   return (
     <main className="page">
+      {/* =========================
+          HEADER
+      ========================== */}
+
       <section className="hero">
         <div className="brand">
           <div className="brand-small">
@@ -287,7 +307,15 @@ export default function Home() {
         </p>
       </section>
 
+      {/* =========================
+          MAIN WORKSPACE
+      ========================== */}
+
       <section className="workspace">
+        {/* =========================
+            BUILDER CARD
+        ========================== */}
+
         <div
           className="card-preview"
           ref={cardRef}
@@ -346,7 +374,8 @@ export default function Home() {
                   <span>ROLE</span>
 
                   <strong>
-                    {role.trim() || "YOUR ROLE / STACK"}
+                    {role.trim() ||
+                      "YOUR ROLE / STACK"}
                   </strong>
                 </div>
               </div>
@@ -367,13 +396,18 @@ export default function Home() {
           </div>
         </div>
 
+        {/* =========================
+            CONTROLS
+        ========================== */}
+
         <div className="controls">
           <label className="upload-box">
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
               onChange={(event) => {
-                const file = event.target.files?.[0];
+                const file =
+                  event.target.files?.[0];
 
                 if (file) {
                   handlePhoto(file);
@@ -388,12 +422,15 @@ export default function Home() {
             </span>
 
             <span className="upload-help">
-              JPG, PNG, WebP or HEIC — straight off your phone is fine.
+              JPG, PNG, WebP or HEIC — straight off
+              your phone is fine.
             </span>
           </label>
 
           <div className="details-box">
             <h2>YOUR DETAILS</h2>
+
+            {/* NAME */}
 
             <label>
               NAME
@@ -408,6 +445,8 @@ export default function Home() {
                 maxLength={40}
               />
             </label>
+
+            {/* BUILDER TITLE */}
 
             <label>
               BUILDER TITLE
@@ -432,6 +471,8 @@ export default function Home() {
               </div>
             </label>
 
+            {/* ROLE / STACK */}
+
             <label>
               ROLE / STACK
 
@@ -447,11 +488,18 @@ export default function Home() {
             </label>
           </div>
 
+          {/* =========================
+              ACTIONS
+          ========================== */}
+
           <div className="actions">
             <button
               type="button"
               className="download"
-              disabled={!canGenerate || isDownloading}
+              disabled={
+                !canGenerate ||
+                isDownloading
+              }
               onClick={downloadCard}
             >
               {isDownloading
@@ -462,7 +510,10 @@ export default function Home() {
             <button
               type="button"
               className="share"
-              disabled={!canGenerate || isSharing}
+              disabled={
+                !canGenerate ||
+                isSharing
+              }
               onClick={shareCard}
             >
               {isSharing
