@@ -131,4 +131,4 @@ The Blob store is configured through Vercel and its environment variables.
 # 👨‍💻 Author
 
 # Rishu Raj
-- GitHub: [@rishurajgit](https://github.com/rishurajgit)
+- GitHub: @rishurajgit
